@@ -12,6 +12,7 @@
 		393FA759233F05E500ADBF01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 393FA757233F05E500ADBF01 /* Main.storyboard */; };
 		393FA75B233F05EC00ADBF01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 393FA75A233F05EC00ADBF01 /* Assets.xcassets */; };
 		393FA75E233F05EC00ADBF01 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 393FA75C233F05EC00ADBF01 /* LaunchScreen.storyboard */; };
+		393FA766233F21D600ADBF01 /* NextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393FA765233F21D600ADBF01 /* NextViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		393FA75A233F05EC00ADBF01 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		393FA75D233F05EC00ADBF01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		393FA75F233F05EC00ADBF01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		393FA765233F21D600ADBF01 /* NextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				393FA753233F05E500ADBF01 /* AppDelegate.swift */,
 				393FA755233F05E500ADBF01 /* ViewController.swift */,
+				393FA765233F21D600ADBF01 /* NextViewController.swift */,
 				393FA757233F05E500ADBF01 /* Main.storyboard */,
 				393FA75A233F05EC00ADBF01 /* Assets.xcassets */,
 				393FA75C233F05EC00ADBF01 /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				393FA756233F05E500ADBF01 /* ViewController.swift in Sources */,
+				393FA766233F21D600ADBF01 /* NextViewController.swift in Sources */,
 				393FA754233F05E500ADBF01 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +289,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UN8UZKY2BZ;
 				INFOPLIST_FILE = asuTask/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -292,7 +297,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.hotmail.oseans.asuTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -303,6 +308,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UN8UZKY2BZ;
 				INFOPLIST_FILE = asuTask/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -310,7 +316,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.hotmail.oseans.asuTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
