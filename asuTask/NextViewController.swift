@@ -9,14 +9,19 @@
 import UIKit
 
 class NextViewController: UIViewController {
-
+    
+    //タスク名のラベル
+    var toDoString = String()
+    @IBOutlet weak var todoLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    todoLabel.text = toDoString
 
 
     }
     
-
+    //戻るボタン
     @IBAction func back(_ sender: Any) {
           dismiss(animated: true, completion:nil)
     }
