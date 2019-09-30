@@ -50,7 +50,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         //タップした時にその配列の番号の中身を取り出して値を渡す
         let nextVC = storyboard?.instantiateViewController(withIdentifier: "next") as! NextViewController
         
-            nextVC.toDoString = textArray[indexPath.row]
+            nextVC.taskNameString = textArray[indexPath.row]
         
         navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -62,13 +62,26 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
     }
     
+        //値を次の画面へ渡す処理
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            
+            if (segue.identifier == "next") {
+                let subVC: NextViewController = segue.destination as! NextViewController
+                //変数名.が持つ変数 =  渡したいものが入った変数
+                
+                
+            }
+        }
+    
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         textArray.append(textField.text!)
         textField.resignFirstResponder()
         textField.text = ""
-        tableView.reloadData()
+//        tableView.reloadData()
+        //タスク作成画面へ遷移させる
+        performSegue(withIdentifier: "next", sender: nil)
         
         return true
         
