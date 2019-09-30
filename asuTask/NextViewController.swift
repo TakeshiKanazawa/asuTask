@@ -10,14 +10,17 @@ import UIKit
 
 class NextViewController: UIViewController {
     
-    //タスク名のラベル
-    var toDoString = String()
-    @IBOutlet weak var todoLabel: UILabel!
+    //タスク名のテキストフィールド
+    var taskNameString = String()
+    
+    //@IBOutlet weak var todoLabel: UILabel!
+    
+    @IBOutlet weak var taskNameTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    todoLabel.text = toDoString
-
+        
+    taskNameTextField.text = taskNameString
 
     }
     
