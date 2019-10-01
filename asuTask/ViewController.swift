@@ -14,7 +14,12 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     @IBOutlet weak var tableView: UITableView!
     
-    //
+    var indexNumber = Int()
+    
+    //リターンキーが押されたかどうかを判定する
+    var textFieldTouchReturnKey = false
+    
+    
     var textArray = [String]()
     
     override func viewDidLoad() {
@@ -68,6 +73,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             if (segue.identifier == "next") {
                 let subVC: NextViewController = segue.destination as! NextViewController
                 //変数名.が持つ変数 =  渡したいものが入った変数
+                subVC.taskNameString = textField.text!
                 
                 
             }
@@ -76,6 +82,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
+        //押された
+        textFieldTouchReturnKey = true
         textArray.append(textField.text!)
         textField.resignFirstResponder()
         textField.text = ""
