@@ -12,20 +12,23 @@ class NextViewController: UIViewController {
     
     //タスク名のテキストフィールド
     var taskNameString = String()
-    
     @IBOutlet weak var taskNameTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
     taskNameTextField.text = taskNameString
+        
 
     }
     
     //戻るボタン
     @IBAction func back(_ sender: Any) {
           dismiss(animated: true, completion:nil)
+            
     }
+    
+
     
 
 }
