@@ -8,15 +8,15 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol {
 
-    
+
     @IBOutlet weak var textField: UITextField!
-    
+
     @IBOutlet weak var tableView: UITableView!
 
     var indexNumber = Int()
-    
+
 
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
@@ -30,6 +30,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.dataSource = self
         textField.delegate = self
 
+    }
+
+    //viewが表示される直前の処理
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        textField.text = ""
+    }
+
+    func reloadSystemData(checkCount: Int) {
+        if checkCount == 1 {
+            tableView.reloadData()
+        }
     }
 
     //セクションのセルの数
@@ -73,28 +85,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if (segue.identifier == "next") &&
             textFieldTouchReturnKey == false {
             //タップした時にその配列の番号の中身を取り出して値を渡す
-            let nextVC = storyboard?.instantiateViewController(withIdentifier: "next") as! NextViewController
+            let nextVC = segue.destination as! NextViewController
 
             //変数名.が持つ変数 =  渡したいものが入った変数
             nextVC.taskNameString = textArray[indexNumber]
 
         } else if (segue.identifier == "next") && textFieldTouchReturnKey == true {
             //タップした時にその配列の番号の中身を取り出して値を渡す
-            let nextVC = storyboard?.instantiateViewController(withIdentifier: "next") as! NextViewController
+
+            let nextVC = segue.destination as! NextViewController
+
             nextVC.taskNameString = textField.text!
-            
+            nextVC.reloadData = self
         }
     }
 
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
-        
+
         //リターンキーが押された
         textFieldTouchReturnKey = true
         textArray.append(textField.text!)
         textField.resignFirstResponder()
-        textField.text = ""
+        //textField.text = ""
         //タスク作成画面へ遷移させる
         performSegue(withIdentifier: "next", sender: nil)
 
