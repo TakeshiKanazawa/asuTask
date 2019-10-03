@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3904B96B234600D30048BCA2 /* TaskMemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3904B96A234600D20048BCA2 /* TaskMemoController.swift */; };
 		393FA754233F05E500ADBF01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393FA753233F05E500ADBF01 /* AppDelegate.swift */; };
 		393FA756233F05E500ADBF01 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393FA755233F05E500ADBF01 /* ViewController.swift */; };
 		393FA759233F05E500ADBF01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 393FA757233F05E500ADBF01 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3904B96A234600D20048BCA2 /* TaskMemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskMemoController.swift; sourceTree = "<group>"; };
 		393FA750233F05E500ADBF01 /* asuTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = asuTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		393FA753233F05E500ADBF01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		393FA755233F05E500ADBF01 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				393FA75C233F05EC00ADBF01 /* LaunchScreen.storyboard */,
 				393FA767234098D900ADBF01 /* Assets.xcassets */,
 				393FA75F233F05EC00ADBF01 /* Info.plist */,
+				3904B96A234600D20048BCA2 /* TaskMemoController.swift */,
 			);
 			path = asuTask;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3904B96B234600D30048BCA2 /* TaskMemoController.swift in Sources */,
 				393FA756233F05E500ADBF01 /* ViewController.swift in Sources */,
 				393FA766233F21D600ADBF01 /* NextViewController.swift in Sources */,
 				393FA754233F05E500ADBF01 /* AppDelegate.swift in Sources */,
