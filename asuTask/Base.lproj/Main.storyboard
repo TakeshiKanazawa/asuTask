@@ -141,7 +141,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タスク通知日時" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ULo-7J-XAx">
-                                <rect key="frame" x="0.0" y="203" width="138" height="40"/>
+                                <rect key="frame" x="0.0" y="278" width="161" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -169,22 +169,23 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="dCB-AC-aec">
-                                <rect key="frame" x="0.0" y="244" width="375" height="133"/>
+                                <rect key="frame" x="0.0" y="319" width="375" height="104"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="date" timeIntervalSinceReferenceDate="591522014.07110798">
                                     <!--2019-09-30 07:40:14 +0000-->
                                 </date>
                             </datePicker>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nXE-JE-Czv">
-                                <rect key="frame" x="172" y="431" width="187" height="29"/>
+                                <rect key="frame" x="75" y="471" width="284" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
+                                    <segment title="なし"/>
                                     <segment title="できたらやる"/>
                                     <segment title="絶対やる"/>
                                 </segments>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="q9k-VR-xAz">
-                                <rect key="frame" x="172" y="522" width="187" height="29"/>
+                                <rect key="frame" x="75" y="560" width="284" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="なし"/>
@@ -199,17 +200,33 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タスク通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7h-dL-MJP">
+                                <rect key="frame" x="0.0" y="189" width="131" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jJx-gX-UV1">
+                                <rect key="frame" x="171" y="219" width="188" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="する"/>
+                                    <segment title="しない"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="VB4-jd-7hR"/>
                     </view>
                     <connections>
+                        <outlet property="taskDatePicker" destination="dCB-AC-aec" id="60a-7I-21C"/>
                         <outlet property="taskNameTextField" destination="13P-pG-Ekc" id="0kw-lR-JH6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hcz-Mf-36K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1775" y="91"/>
+            <point key="canvasLocation" x="1830" y="16"/>
         </scene>
         <!--タスクメモ-->
         <scene sceneID="ytA-m9-GnK">
@@ -255,7 +272,6 @@
         <!--明日タスク-->
         <scene sceneID="AYm-mf-4EG">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jEh-Nv-VUL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="mCp-gX-AlJ" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Qr-nJ-SV1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -265,6 +281,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="明日タスク" image="moon" id="qH2-H2-3PA"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jEh-Nv-VUL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="926" y="842"/>
         </scene>
