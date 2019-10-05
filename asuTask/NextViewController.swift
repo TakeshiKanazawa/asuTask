@@ -31,15 +31,29 @@ class NextViewController: UIViewController {
 
     }
 
-    //戻るボタン
-    @IBAction func back(_ sender: Any) {
+    @IBOutlet weak var taskDatePicker: UIDatePicker!
 
-        reloadData?.reloadSystemData(checkCount: 1)
-        dismiss(animated: true, completion: nil)
+    //タスク通知セグメント設定
+    @IBAction func taskSegment(_ sender: Any) {
+        switch (sender as AnyObject).selectedSegmentIndex {
+        case 0:
+            //タスク通知のdatepickerを無効化する処理
+            taskDatePicker.isHidden = true
+            //datepickerの入力値を空にする
+            //タスク通知のdatepickerを遊効化する処理
+        case 1: taskDatePicker.isHidden = false
 
+        default:
+            break
+        }
     }
 
 
 
+    //戻るボタン
+    @IBAction func back(_ sender: Any) {
+        reloadData?.reloadSystemData(checkCount: 1)
+        dismiss(animated: true, completion: nil)
+    }
 
 }
