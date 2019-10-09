@@ -214,6 +214,9 @@
                                     <segment title="する"/>
                                     <segment title="しない"/>
                                 </segments>
+                                <connections>
+                                    <action selector="taskSegment:" destination="uHD-aB-j8v" eventType="valueChanged" id="iQP-RC-hsT"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -226,7 +229,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hcz-Mf-36K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1830" y="16"/>
+            <point key="canvasLocation" x="1829.5999999999999" y="15.742128935532236"/>
         </scene>
         <!--タスクメモ-->
         <scene sceneID="ytA-m9-GnK">

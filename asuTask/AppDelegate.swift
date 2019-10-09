@@ -13,10 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    //タスク作成時、datepickerで取得した値を代入
+
     let hours = 19
     let minute = 00
 
-    //プッシュ通知の許可()
+    //プッシュ通知の許可
     var notificationGranted = true
 
     var isFirst = true
@@ -24,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        //通知許可を促すアラート
+        //通知許可を促すアラートを出す
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
 
             self.notificationGranted = granted
@@ -43,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setNotification() {
 
+        //通知日時の設定
         var notificationTime = DateComponents()
         var trigger: UNNotificationTrigger
 
@@ -62,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
 
-
+    //アプリがバックグラウンドの時の通知設定
     func applicationDidEnterBackground(_ application: UIApplication) {
         setNotification()
     }

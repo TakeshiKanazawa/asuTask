@@ -16,39 +16,37 @@ protocol ReloadProtocol {
 
 class NextViewController: UIViewController {
 
-
     var reloadData: ReloadProtocol?
 
     //タスク名のテキストフィールド
     var taskNameString = String()
     @IBOutlet weak var taskNameTextField: UITextField!
 
+    //タスク通知日時のDatePicker
+    @IBOutlet weak var taskDatePicker: UIDatePicker!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         taskNameTextField.text = taskNameString
-
-
     }
 
-    @IBOutlet weak var taskDatePicker: UIDatePicker!
-
     //タスク通知セグメント設定
+
     @IBAction func taskSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
         case 0:
             //タスク通知のdatepickerを無効化する処理
-            taskDatePicker.isHidden = true
+            taskDatePicker.isEnabled = true
             //datepickerの入力値を空にする
-            //タスク通知のdatepickerを遊効化する処理
-        case 1: taskDatePicker.isHidden = false
 
-        default:
+            //タスク通知のdatepickerを有効化する処理
+        case 1: taskDatePicker.isEnabled = false
+
+        default: //taskDatePicker.isHidden = false
             break
         }
     }
-
-
 
     //戻るボタン
     @IBAction func back(_ sender: Any) {

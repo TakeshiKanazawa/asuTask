@@ -64,11 +64,11 @@
 				393FA755233F05E500ADBF01 /* ViewController.swift */,
 				393FA765233F21D600ADBF01 /* NextViewController.swift */,
 				397CF76B23434D4B0087D9A5 /* DetailViewController.swift */,
+				3904B96A234600D20048BCA2 /* TaskMemoController.swift */,
 				393FA757233F05E500ADBF01 /* Main.storyboard */,
 				393FA75C233F05EC00ADBF01 /* LaunchScreen.storyboard */,
 				393FA767234098D900ADBF01 /* Assets.xcassets */,
 				393FA75F233F05EC00ADBF01 /* Info.plist */,
-				3904B96A234600D20048BCA2 /* TaskMemoController.swift */,
 			);
 			path = asuTask;
 			sourceTree = "<group>";
