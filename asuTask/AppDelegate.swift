@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var isFirst = true
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         //通知許可を促すアラートを出す
@@ -48,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //通知日時の設定
         var notificationTime = DateComponents()
         var trigger: UNNotificationTrigger
+
+        //ここにdatepickerで取得した値をset
 
         notificationTime.hour = hours
         notificationTime.minute = minute
