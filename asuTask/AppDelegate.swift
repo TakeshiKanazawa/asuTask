@@ -8,68 +8,65 @@
 
 import UIKit
 import UserNotifications
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
 
-    //タスク作成時、datepickerで取得した値を代入
-
-    let hours = 19
-    let minute = 00
-
-    //プッシュ通知の許可
-    var notificationGranted = true
-
-    var isFirst = true
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        //通知許可を促すアラートを出す
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-
-            self.notificationGranted = granted
-
-            if let error = error {
-                print("エラーです")
-            }
-        }
-
-        isFirst = false
-
-        setNotification()
-
-        return true
-    }
-
-    func setNotification() {
-
-        //通知日時の設定
-        var notificationTime = DateComponents()
-        var trigger: UNNotificationTrigger
-
-        //ここにdatepickerで取得した値をset
-
-        notificationTime.hour = hours
-        notificationTime.minute = minute
-        trigger = UNCalendarNotificationTrigger(dateMatching: notificationTime, repeats: true)
-        let content = UNMutableNotificationContent()
-        content.title = "タスク実行時間です"
-        content.body = "タスク「」を実行してください"
-        content.sound = .default
-
-        //通知スタイル
-        let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
-
-        //通知をセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-
-    }
+//    //プッシュ通知の許可フラグ
+//    var notificationGranted = true
+//
+//    var isFirst = true
+//
+//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+//
+//        //通知許可を促すアラートを出す
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+//
+//            self.notificationGranted = granted
+//
+//            if let error = error {
+//                print("エラーです")
+//            }
+//        }
+//
+//        isFirst = false
+//
+//        setNotification()
+//
+//        return true
+//    }
+//
+//    func setNotification() {
+//
+//        //通知日時の設定
+//        var notificationTime = DateComponents()
+//        var trigger: UNNotificationTrigger
+//
+//        //ここにdatepickerで取得した値をset
+//
+//        notificationTime.hour = hours
+//        notificationTime.minute = minute
+//        trigger = UNCalendarNotificationTrigger(dateMatching: notificationTime, repeats: true)
+//        let content = UNMutableNotificationContent()
+//        content.title = "タスク実行時間です"
+//        content.body = "タスク「」を実行してください"
+//        content.sound = .default
+//
+//        //通知スタイル
+//        let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
+//
+//        //通知をセット
+//        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+//
+//    }
 
     //アプリがバックグラウンドの時の通知設定
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        setNotification()
-    }
+//    func applicationDidEnterBackground(_ application: UIApplication) {
+//        setNotification()
+//    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
