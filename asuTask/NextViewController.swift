@@ -9,14 +9,19 @@
 import UIKit
 
 protocol ReloadProtocol {
-
     //規則をきめる
     func reloadSystemData(checkCount: Int)
+}
+
+protocol DateProtocol {
+    //規則を決める
+    func setDate(date: Date)
 }
 
 class NextViewController: UIViewController {
 
     var reloadData: ReloadProtocol?
+    var dateProtol: DateProtocol?
 
     //タスク名のテキストフィールド
     var taskNameString = String()
@@ -25,15 +30,12 @@ class NextViewController: UIViewController {
     //タスク通知日時のDatePicker
     @IBOutlet weak var taskDatePicker: UIDatePicker!
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         taskNameTextField.text = taskNameString
-        //現在時刻を取得
-        let now = NSDate()
-        //デートピッカーの値を現在時刻に設定
-        taskDatePicker.date = now as Date
+        //Datepicker無効果
+        taskDatePicker.isEnabled = false
 
         //デートピッカーの値を取得
         let taskDate = taskDatePicker.date
@@ -45,20 +47,20 @@ class NextViewController: UIViewController {
         print("\(formatter.string(from: taskDatePicker.date))")
     }
 
-    @IBOutlet weak var test: UILabel!
     //タスク通知セグメント設定
 
     @IBAction func taskSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
         case 0:
             //タスク通知のdatepickerを無効化する処理
-            taskDatePicker.isEnabled = true
+            taskDatePicker.isEnabled = false
             //datepickerの入力値を空にする
 
             //タスク通知のdatepickerを有効化する処理
-        case 1: taskDatePicker.isEnabled = false
+        case 1: taskDatePicker.isEnabled = true
 
         default:
+            taskDatePicker.isEnabled = false
             break
         }
     }
@@ -72,10 +74,12 @@ class NextViewController: UIViewController {
     //完了ボタン
     @IBAction func done(_ sender: Any) {
 
-        let taskNotificationDate = taskDatePicker.date
+        dateProtol?.setDate(date: taskDatePicker!.date)
         reloadData?.reloadSystemData(checkCount: 1)
         dismiss(animated: true, completion: nil)
 
     }
+
 }
+
 
