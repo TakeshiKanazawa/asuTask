@@ -8,6 +8,7 @@
 
 import UIKit
 import StoreKit
+import MessageUI
 
 class SettingViewController: UIViewController {
 
@@ -43,26 +44,50 @@ class SettingViewController: UIViewController {
     }
 
 
-    //お問い合わせ画面へ遷移ボタン
+    //お問い合わせメーラー起動ボタン
     @IBAction func contact(_ sender: Any) {
-
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self as! MFMailComposeViewControllerDelegate
+            mail.setToRecipients(["oseans@hotmail.co.jp"]) //宛先アドレス
+            mail.setSubject("お問い合わせ") //件名
+            mail.setMessageBody("ここに本文が入ります。", isHTML: false) //本文
+            present(mail,animated: true, completion: nil)
+        }else {
+            print("送信できません")
+        }
     }
-
+    
     // アプリのレビュー画面へ遷移ボタン
     @IBAction func review(_ sender: Any) {
         //レビューページへ遷移
         if #available(iOS 10.3, *) { SKStoreReviewController.requestReview()
         }
-        // ios 10.3未満の処理
-            else {
-                if let url = URL (string: "itms-apps:itunes.apple.com/app/id1274048262?action=write-review") {
-
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(url, options: [:])
-                    } else {
-                        UIApplication.shared.openURL(url)
-                    }
+            // ios 10.3未満の処理
+        else {
+            if let url = URL (string: "itms-apps:itunes.apple.com/app/id1274048262?action=write-review") {
+                
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:])
+                } else {
+                    UIApplication.shared.openURL(url)
                 }
+            }
         }
     }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        switch result {
+        case .cancelled:
+            print("キャンセル")
+        case .saved:
+            print("下書き保存")
+        case .sent:
+            print("送信成功")
+        default:
+            print("送信失敗")
+        }
+        dismiss(animated: true, completion: nil)
+    }
 }
+

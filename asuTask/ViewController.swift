@@ -10,13 +10,15 @@ import UIKit
 import UserNotifications
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol {
-    
+
     var notificationGranted = true
 
-
+    //タスク入力用テキストフィールド
     @IBOutlet weak var textField: UITextField!
-
+    //テーブルビュー
     @IBOutlet weak var tableView: UITableView!
+    //タスク件数表示用レベル
+    @IBOutlet weak var todaysTaskMessageLabel: UILabel!
 
     var indexNumber = Int()
 
@@ -38,8 +40,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //viewが表示される直前の処理
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        todaysTaskMessageLabelChange()
         textField.text = ""
 
+    }
+    //本日のタスクの文言表示処理メソッド
+    func todaysTaskMessageLabelChange() {
+        //本日のタスクが１件以上なら「本日のタスクは〇〇件です」と表示
+        if textArray.count >= 1 {
+            todaysTaskMessageLabel.text = "本日のタスクは\(textArray.count)件です"
+            //それ以外は本日のタスクはありません」と表示
+        } else {
+            todaysTaskMessageLabel.text = "本日のタスクはありません"
+        }
     }
 
     func reloadSystemData(checkCount: Int) {
@@ -49,8 +63,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func setDate(date: Date) {
-        //プッシュ通知の許可
-   
+
         //プッシュ通知認証許可フラグ
         var isFirst = true
 
@@ -81,7 +94,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //ここにdatepickerで取得した値をset
             notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
 
-            //notificationTime.minute = minute
             trigger = UNCalendarNotificationTrigger(dateMatching: notificationTime, repeats: true)
             let content = UNMutableNotificationContent()
             content.title = "タスク実行時間です"
@@ -163,7 +175,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         textFieldTouchReturnKey = true
         textArray.append(textField.text!)
         textField.resignFirstResponder()
-        //textField.text = ""
         //タスク作成画面へ遷移させる
         performSegue(withIdentifier: "next", sender: nil)
 
