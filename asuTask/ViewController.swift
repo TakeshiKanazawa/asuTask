@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, UNUserNotificationCenterDelegate {
 
     var notificationGranted = true
 
@@ -17,11 +17,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var textField: UITextField!
     //テーブルビュー
     @IBOutlet weak var tableView: UITableView!
-    //タスク件数表示用レベル
+    //タスク件数表示用ラベル
     @IBOutlet weak var todaysTaskMessageLabel: UILabel!
 
     var indexNumber = Int()
-
 
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
@@ -40,17 +39,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //viewが表示される直前の処理
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         todaysTaskMessageLabelChange()
         textField.text = ""
 
     }
+
     //本日のタスクの文言表示処理メソッド
     func todaysTaskMessageLabelChange() {
         //本日のタスクが１件以上なら「本日のタスクは〇〇件です」と表示
         if textArray.count >= 1 {
             todaysTaskMessageLabel.text = "本日のタスクは\(textArray.count)件です"
-            //それ以外は本日のタスクはありません」と表示
+            //本日のタスクがない場合(0件)
         } else {
             todaysTaskMessageLabel.text = "本日のタスクはありません"
         }
@@ -67,22 +67,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //プッシュ通知認証許可フラグ
         var isFirst = true
 
-        func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        //通知許可を促すアラートを出す
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
 
-            //通知許可を促すアラートを出す
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            self.notificationGranted = granted
 
-                self.notificationGranted = granted
-
-                if let error = error {
-                    print("エラーです")
-                }
+            if let error = error {
+                print("エラーです")
             }
 
             isFirst = false
-            setNotification()
 
-            return true
         }
 
         func setNotification() {
@@ -92,12 +88,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             var trigger: UNNotificationTrigger
 
             //ここにdatepickerで取得した値をset
+
             notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
+            //通知時間をset
+            notificationTime.hour = notificationTime.hour
+            notificationTime.minute = notificationTime.minute
 
             trigger = UNCalendarNotificationTrigger(dateMatching: notificationTime, repeats: true)
             let content = UNMutableNotificationContent()
             content.title = "タスク実行時間です"
-            content.body = "タスク「」を実行してください"
+            content.body = "タスク\(textArray[indexNumber])を実行してください"
             content.sound = .default
 
             //通知スタイル
@@ -105,10 +105,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //通知をセット
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         }
-        //アプリがバックグラウンドの時の通知設定(アプリがBgになる直前に呼ばれる)
-        func applicationDidEnterBackground(_ application: UIApplication) {
-            setNotification()
-        }
+
+        setNotification()
     }
 
     //セクションのセルの数
@@ -116,6 +114,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return textArray.count
     }
 
+    //セクション数(今回は1つ)
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
 
@@ -129,12 +128,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        cell.imageView?.image = UIImage(named:)
         return cell
     }
-
+//セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         textFieldTouchReturnKey = false
         indexNumber = indexPath.row
-
 
     }
 
@@ -144,6 +142,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return view.frame.size.height / 8
 
     }
+
+    //セルをスワイプで削除
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+
+        //アイテム削除処理
+        textArray.remove(at: indexPath.row)
+        let indexPaths = [indexPath]
+        tableView.deleteRows(at: indexPaths, with: .automatic)
+
+
+    }
+
 
     //値を次の画面へ渡す処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -164,12 +174,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             nextVC.taskNameString = textField.text!
             nextVC.reloadData = self
+            nextVC.dateProtol = self
         }
     }
 
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
 
         //リターンキーが押された
         textFieldTouchReturnKey = true
