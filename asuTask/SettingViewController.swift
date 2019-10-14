@@ -10,7 +10,7 @@ import UIKit
 import StoreKit
 import MessageUI
 
-class SettingViewController: UIViewController {
+class SettingViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //datepicker
     @IBOutlet weak var dailyTaskNotificationDatePicker: UIDatePicker!
@@ -48,34 +48,35 @@ class SettingViewController: UIViewController {
     @IBAction func contact(_ sender: Any) {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self as! MFMailComposeViewControllerDelegate
+            mail.mailComposeDelegate = self
             mail.setToRecipients(["oseans@hotmail.co.jp"]) //宛先アドレス
-            mail.setSubject("お問い合わせ") //件名
-            mail.setMessageBody("ここに本文が入ります。", isHTML: false) //本文
-            present(mail,animated: true, completion: nil)
-        }else {
+            mail.setSubject("アプリに関するお問い合わせ") //件名
+            mail.setMessageBody("お問い合わせ内容の入力をお願いします。", isHTML: false) //本文
+            present(mail, animated: true, completion: nil)
+        } else {
             print("送信できません")
         }
     }
-    
+
     // アプリのレビュー画面へ遷移ボタン
     @IBAction func review(_ sender: Any) {
-        //レビューページへ遷移
-        if #available(iOS 10.3, *) { SKStoreReviewController.requestReview()
-        }
-            // ios 10.3未満の処理
-        else {
-            if let url = URL (string: "itms-apps:itunes.apple.com/app/id1274048262?action=write-review") {
-                
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url, options: [:])
-                } else {
-                    UIApplication.shared.openURL(url)
-                }
+
+        // TODO: app idが現在未登録のため仮番号。発行次第正しいものへ変更
+        let MY_APP_ID = "1274048262"
+        //レビュータブを開くためのURLを指定する
+        // TODO: app idが現在未登録のため仮番号。発行次第正しいものへ変更
+        let urlString =
+            "itms-apps://itunes.apple.com/jp/app/id\(1274048262)?mt=8&action=write-review"
+        if let url = URL(string: urlString) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:])
+            } else {
+                UIApplication.shared.openURL(url)
             }
         }
     }
-    
+
+
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result {
         case .cancelled:
