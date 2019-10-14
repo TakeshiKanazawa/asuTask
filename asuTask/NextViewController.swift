@@ -38,8 +38,6 @@ class NextViewController: UIViewController {
         taskDatePicker.isEnabled = false
 
         //デートピッカーの値を取得
-        let taskDate = taskDatePicker.date
-        let calendar = Calendar.current
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "HH:mm"
@@ -48,7 +46,6 @@ class NextViewController: UIViewController {
     }
 
     //タスク通知セグメント設定
-
     @IBAction func taskSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
         case 0:
@@ -72,14 +69,16 @@ class NextViewController: UIViewController {
     }
 
     //完了ボタン
-    @IBAction func done(_ sender: Any) {
 
-        dateProtol?.setDate(date: taskDatePicker!.date)
+    @IBAction func done(_ sender: Any) {
+        print(taskDatePicker.date)
+        dateProtol!.setDate(date: taskDatePicker!.date)
         reloadData?.reloadSystemData(checkCount: 1)
         dismiss(animated: true, completion: nil)
 
     }
-
 }
+
+
 
 
