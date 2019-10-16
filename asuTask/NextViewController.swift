@@ -52,6 +52,7 @@ class NextViewController: UIViewController {
             //タスク通知のdatepickerを無効化する処理
             taskDatePicker.isEnabled = false
             //datepickerの入力値を空にする
+            
 
             //タスク通知のdatepickerを有効化する処理
         case 1: taskDatePicker.isEnabled = true
@@ -71,9 +72,9 @@ class NextViewController: UIViewController {
     //完了ボタン
 
     @IBAction func done(_ sender: Any) {
-        print(taskDatePicker.date)
+    
         dateProtol!.setDate(date: taskDatePicker!.date)
-        reloadData?.reloadSystemData(checkCount: 1)
+        print(taskDatePicker.date); reloadData?.reloadSystemData(checkCount: 1)
         dismiss(animated: true, completion: nil)
 
     }

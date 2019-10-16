@@ -13,15 +13,18 @@ import UserNotifications
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var viewController: ViewController!
     
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        //setNotification()
+
+        //コンパイルエラーになってしまうコード
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.viewController.setDate(date: Date)
+        
     }
     
     
