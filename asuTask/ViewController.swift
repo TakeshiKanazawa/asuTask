@@ -27,12 +27,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     var textArray = [String]()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
+
+        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.viewController = self
 
     }
 
@@ -144,14 +148,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     //セルをスワイプで削除
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 
-        //アイテム削除処理
-        textArray.remove(at: indexPath.row)
-        let indexPaths = [indexPath]
-        tableView.deleteRows(at: indexPaths, with: .automatic)
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
+            self.textArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+        deleteButton.backgroundColor = UIColor.red
 
-
+        return [deleteButton]
     }
 
 
