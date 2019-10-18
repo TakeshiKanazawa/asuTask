@@ -14,6 +14,7 @@ class SettingViewController: UIViewController, MFMailComposeViewControllerDelega
 
     //datepicker
     @IBOutlet weak var dailyTaskNotificationDatePicker: UIDatePicker!
+    
 
     override func viewDidLoad() {
         //dailyTaskNotificationDatePicker無効化
