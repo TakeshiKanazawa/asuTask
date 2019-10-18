@@ -152,10 +152,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="dCB-AC-aec">
-                                <rect key="frame" x="0.0" y="319" width="375" height="104"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </datePicker>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nXE-JE-Czv">
                                 <rect key="frame" x="75" y="471" width="284" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -215,18 +211,22 @@
                                     <action selector="done:" destination="uHD-aB-j8v" eventType="touchUpInside" id="VtU-1R-2TY"/>
                                 </connections>
                             </button>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="J0c-TC-jfI">
+                                <rect key="frame" x="0.0" y="317" width="375" height="106"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="VB4-jd-7hR"/>
                     </view>
                     <connections>
-                        <outlet property="taskDatePicker" destination="dCB-AC-aec" id="60a-7I-21C"/>
+                        <outlet property="taskDatePicker" destination="J0c-TC-jfI" id="2no-Mn-OxD"/>
                         <outlet property="taskNameTextField" destination="13P-pG-Ekc" id="0kw-lR-JH6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hcz-Mf-36K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1774" y="34"/>
+            <point key="canvasLocation" x="1773.5999999999999" y="33.733133433283363"/>
         </scene>
         <!--Setting View Controller-->
         <scene sceneID="Xbe-uD-Wfq">
@@ -324,7 +324,7 @@
                         <viewLayoutGuide key="safeArea" id="MMg-UB-Ssi"/>
                     </view>
                     <connections>
-                        <outlet property="dailyTaskNotificationDatePicker" destination="vyB-vH-smi" id="bj9-ua-I5n"/>
+                        <outlet property="dailyTaskNotificationDatePicker" destination="vyB-vH-smi" id="Mzh-4A-dL5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tAv-OP-iG0" userLabel="First Responder" sceneMemberID="firstResponder"/>

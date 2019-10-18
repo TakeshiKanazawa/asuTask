@@ -10,20 +10,22 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder,UIApplicationDelegate {
+ 
 
     var window: UIWindow?
-    var viewController: ViewController!
+    //var viewController: ViewController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
+        
 
-        //コンパイルエラーになってしまうコード
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        appDelegate.viewController.setDate(date: Date)
+//        //コンパイルエラーになってしまうコード
+//       let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.viewController.setSystemtDate(date:Date)
         
     }
     
@@ -36,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func applicationWillEnterForeground(_ application: UIApplication) {
+        
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
 

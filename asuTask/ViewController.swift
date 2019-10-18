@@ -35,8 +35,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.dataSource = self
         textField.delegate = self
 
-        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.viewController = self
+//        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.viewController = self
 
     }
 
@@ -66,8 +66,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
-    func setDate(date: Date) {
-
+    func setDateSystem(date: Date) {
+        print(date)
+        
         //プッシュ通知認証許可フラグ
         var isFirst = true
 
@@ -81,11 +82,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 print("エラーです")
             }
 
-            isFirst = false
-
         }
+        isFirst = false
 
-        func setNotification() {
+        func setNotification(date: Date) {
 
             //通知日時の設定
             var notificationTime = DateComponents()
@@ -94,23 +94,36 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //ここにdatepickerで取得した値をset
 
             notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
-            //通知時間をset
             notificationTime.hour = notificationTime.hour
             notificationTime.minute = notificationTime.minute
+            //debug用コード群(TODO: 後で削除)
+            print(notificationTime.year!)
+            print(notificationTime.month!)
+            print(notificationTime.day!)
+            print(notificationTime.hour!)
+            print(notificationTime.minute!)
 
             trigger = UNCalendarNotificationTrigger(dateMatching: notificationTime, repeats: true)
             let content = UNMutableNotificationContent()
             content.title = "タスク実行時間です"
-            content.body = "タスク\(textArray[indexNumber])を実行してください"
+            content.body = "タスクを実行してください"
             content.sound = .default
 
             //通知スタイル
             let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
             //通知をセット
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            //debug用コード群(TODO: 後で削除)
+            //NFセンターに登録した一覧を表示
+            let center = UNUserNotificationCenter.current()
+            center.getPendingNotificationRequests { (requests: [UNNotificationRequest]) in
+                for request in requests {
+                    print(request)
+                    print("---------------")
+                }
+            }
         }
-
-        setNotification()
+          setNotification(date: date)
     }
 
     //セクションのセルの数
@@ -129,7 +142,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         cell.textLabel?.text = textArray[indexPath.row]
-//        cell.imageView?.image = UIImage(named:)
+        
         return cell
     }
 //セルが選択された時
@@ -148,7 +161,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     //セルをスワイプで削除
-
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
             self.textArray.remove(at: indexPath.row)

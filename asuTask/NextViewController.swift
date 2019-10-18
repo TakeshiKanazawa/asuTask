@@ -15,7 +15,7 @@ protocol ReloadProtocol {
 
 protocol DateProtocol {
     //規則を決める
-    func setDate(date: Date)
+    func setDateSystem(date: Date)
 }
 
 class NextViewController: UIViewController {
@@ -28,10 +28,13 @@ class NextViewController: UIViewController {
     @IBOutlet weak var taskNameTextField: UITextField!
 
     //タスク通知日時のDatePicker
+
+
     @IBOutlet weak var taskDatePicker: UIDatePicker!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
 
         taskNameTextField.text = taskNameString
         //Datepicker無効果
@@ -45,6 +48,7 @@ class NextViewController: UIViewController {
         print("\(formatter.string(from: taskDatePicker.date))")
     }
 
+
     //タスク通知セグメント設定
     @IBAction func taskSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
@@ -52,7 +56,7 @@ class NextViewController: UIViewController {
             //タスク通知のdatepickerを無効化する処理
             taskDatePicker.isEnabled = false
             //datepickerの入力値を空にする
-            
+
 
             //タスク通知のdatepickerを有効化する処理
         case 1: taskDatePicker.isEnabled = true
@@ -70,15 +74,16 @@ class NextViewController: UIViewController {
     }
 
     //完了ボタン
-
     @IBAction func done(_ sender: Any) {
-    
-        dateProtol!.setDate(date: taskDatePicker!.date)
-        print(taskDatePicker.date); reloadData?.reloadSystemData(checkCount: 1)
-        dismiss(animated: true, completion: nil)
+        dateProtol!.setDateSystem(date: taskDatePicker!.date)
 
+        print(taskDatePicker.date)
+        reloadData?.reloadSystemData(checkCount: 1)
+        dismiss(animated: true, completion: nil)
     }
-}
+    
+    }
+
 
 
 
