@@ -10,23 +10,31 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder,UIApplicationDelegate {
- 
+class AppDelegate: UIResponder,UIApplicationDelegate,DateProtocol {
+    
+    var viewController: ViewController!
+    
 
     var window: UIWindow?
-    //var viewController: ViewController!
+    var dateTime = Date()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        
         return true
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         
+//    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.viewController.setDateSystem(date: dateTime)
 
-//        //コンパイルエラーになってしまうコード
-//       let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        appDelegate.viewController.setSystemtDate(date:Date)
+
         
+    }
+    
+    func setDateSystem(date: Date) {
+        dateTime = date
     }
     
     
@@ -49,7 +57,10 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    // フォアグラウンドの場合でも通知を表示する
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
 }
+
 
