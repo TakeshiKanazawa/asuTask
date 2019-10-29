@@ -35,7 +35,6 @@ class NextViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         taskNameTextField.text = taskNameString
         //Datepicker無効果
         taskDatePicker.isEnabled = false
@@ -77,7 +76,6 @@ class NextViewController: UIViewController {
     @IBAction func done(_ sender: Any) {
         dateProtol!.setDateSystem(date: taskDatePicker!.date)
 
-        print(taskDatePicker.date)
         reloadData?.reloadSystemData(checkCount: 1)
         dismiss(animated: true, completion: nil)
     }
