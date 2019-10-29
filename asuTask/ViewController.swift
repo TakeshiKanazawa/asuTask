@@ -10,44 +10,9 @@ import UIKit
 import UserNotifications
 
 extension Date {
-    /// Returns the amount of years from another date
-    func years(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.year], from: date, to: self).year ?? 0
-    }
-    /// Returns the amount of months from another date
-    func months(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.month], from: date, to: self).month ?? 0
-    }
-    /// Returns the amount of weeks from another date
-    func weeks(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.weekOfMonth], from: date, to: self).weekOfMonth ?? 0
-    }
-    /// Returns the amount of days from another date
-    func days(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.day], from: date, to: self).day ?? 0
-    }
-    /// Returns the amount of hours from another date
-    func hours(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.hour], from: date, to: self).hour ?? 0
-    }
-    /// Returns the amount of minutes from another date
-    func minutes(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.minute], from: date, to: self).minute ?? 0
-    }
-    /// Returns the amount of seconds from another date
+    //引数で指定した日付からの秒数を返す
     func seconds(from date: Date) -> Int {
         return Calendar.current.dateComponents([.second], from: date, to: self).second ?? 0
-    }
-    /// Returns the a custom time interval description from another date
-    func offset(from date: Date) -> String {
-        if years(from: date) > 0 { return "\(years(from: date))y" }
-        if months(from: date) > 0 { return "\(months(from: date))M" }
-        if weeks(from: date) > 0 { return "\(weeks(from: date))w" }
-        if days(from: date) > 0 { return "\(days(from: date))d" }
-        if hours(from: date) > 0 { return "\(hours(from: date))h" }
-        if minutes(from: date) > 0 { return "\(minutes(from: date))m" }
-        if seconds(from: date) > 0 { return "\(seconds(from: date))s" }
-        return ""
     }
 }
 
@@ -131,16 +96,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func setNotification(date: Date) {
         //通知日時の設定
-        var notificationTime = DateComponents()
         var trigger: UNNotificationTrigger
         //noticficationtimeにdatepickerで取得した値をset
-        notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
+        let notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
         //現在時刻の取得
-        let now = NSDate()
+        let now = Date()
         //変数taskedDateに取得日時をDatecomponens型で代入
-        let taskeDate = DateComponents(calendar: .current, year: notificationTime.year, month: notificationTime.month, day: notificationTime.day, hour: notificationTime.hour, minute: notificationTime.minute).date!
+        let taskDate = DateComponents(calendar: .current, year: notificationTime.year, month: notificationTime.month, day: notificationTime.day, hour: notificationTime.hour, minute: notificationTime.minute).date!
         //変数secondsに現在時刻とタスク通知日時の差分の秒数を代入
-        let seconds = taskeDate.seconds(from: now as Date)
+        let seconds = taskDate.seconds(from: now)
         //Task通知秒数のTEST出力用
         print(seconds)
         //triggerに現在時刻から〇〇秒後のタスク実行時間をset
