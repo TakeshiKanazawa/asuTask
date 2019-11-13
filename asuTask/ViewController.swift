@@ -29,13 +29,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var todaysTaskMessageLabel: UILabel!
 
     var indexNumber = Int()
+    var uuid = 0
 
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
 
     //タスク名の配列
     var textArray = [String]()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,6 +76,48 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.reloadData()
         }
     }
+    
+     //セクションのセルの数
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return textArray.count
+        }
+
+        //セクション数(今回は1つ)
+        func numberOfSections(in tableView: UITableView) -> Int {
+            return 1
+        }
+        //セルの中身
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = textArray[indexPath.row]
+            return cell
+        }
+    //セルが選択された時
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            textFieldTouchReturnKey = false
+            indexNumber = indexPath.row
+        }
+
+        //セルの高さ
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return view.frame.size.height / 8
+        }
+
+        //セルをスワイプで削除
+        func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+            let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
+                self.textArray.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+               //登録済みの通知も削除する
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(self.uuid)"])
+                print(self.uuid)
+                
+            }
+            deleteButton.backgroundColor = UIColor.red
+
+            return [deleteButton]
+        }
 
     func setDateSystem(date: Date) {
 
@@ -114,49 +156,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         content.title = "タスク実行時間です。"
         content.body = "タスクを実行してください"
         content.sound = .default
+        
         //通知スタイルを指定
-        let request = UNNotificationRequest(identifier: "uuid", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "\(uuid)", content: content, trigger: trigger)
+    
         //通知をセット
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-
+        //identifier(識別子)をカウントUP
+        uuid += 1
     }
-    //セクションのセルの数
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return textArray.count
-    }
-
-    //セクション数(今回は1つ)
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    //セルの中身
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = textArray[indexPath.row]
-        return cell
-    }
-//セルが選択された時
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        textFieldTouchReturnKey = false
-        indexNumber = indexPath.row
-    }
-
-    //セルの高さ
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.size.height / 8
-    }
-
-    //セルをスワイプで削除
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
-            self.textArray.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
-        deleteButton.backgroundColor = UIColor.red
-
-        return [deleteButton]
-    }
-
+   
     //値を次の画面へ渡す処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //セルがタップされた状態(タスク詳細画面の表示)

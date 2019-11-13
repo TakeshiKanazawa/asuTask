@@ -160,6 +160,9 @@
                                     <segment title="できたらやる"/>
                                     <segment title="絶対やる"/>
                                 </segments>
+                                <connections>
+                                    <action selector="taskPriority:" destination="uHD-aB-j8v" eventType="valueChanged" id="KC6-XR-Bip"/>
+                                </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="q9k-VR-xAz">
                                 <rect key="frame" x="75" y="560" width="284" height="29"/>
@@ -169,6 +172,9 @@
                                     <segment title="1分"/>
                                     <segment title="5分"/>
                                 </segments>
+                                <connections>
+                                    <action selector="taskSnooze:" destination="uHD-aB-j8v" eventType="valueChanged" id="fxo-eC-CyW"/>
+                                </connections>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タスク優先度" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMe-xy-dvU">
                                 <rect key="frame" x="0.0" y="431" width="118" height="34"/>
@@ -287,13 +293,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="10" translatesAutoresizingMaskIntoConstraints="NO" id="vyB-vH-smi">
-                                <rect key="frame" x="133" y="209" width="241" height="90"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="dailyTaskNotificationDatePicker:" destination="J56-Xx-p0n" eventType="valueChanged" id="CIc-Z8-gRB"/>
-                                </connections>
-                            </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="サポート・その他" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTe-fM-2ts">
                                 <rect key="frame" x="0.0" y="460" width="375" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -319,17 +318,21 @@
                                     <action selector="review:" destination="J56-Xx-p0n" eventType="touchUpInside" id="MpX-wY-htu"/>
                                 </connections>
                             </button>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="6eC-u4-W0S">
+                                <rect key="frame" x="0.0" y="279" width="375" height="116"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="MMg-UB-Ssi"/>
                     </view>
                     <connections>
-                        <outlet property="dailyTaskNotificationDatePicker" destination="vyB-vH-smi" id="Mzh-4A-dL5"/>
+                        <outlet property="dailyTaskNotificationDatePicker" destination="6eC-u4-W0S" id="G3U-pt-AgC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tAv-OP-iG0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="926" y="-591"/>
+            <point key="canvasLocation" x="925.60000000000002" y="-591.45427286356824"/>
         </scene>
         <!--タスクメモ-->
         <scene sceneID="ytA-m9-GnK">
