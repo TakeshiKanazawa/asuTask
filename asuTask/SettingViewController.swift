@@ -9,12 +9,16 @@
 import UIKit
 import StoreKit
 import MessageUI
+import UserNotifications
 
-class SettingViewController: UIViewController, MFMailComposeViewControllerDelegate {
+class SettingViewController: UIViewController, MFMailComposeViewControllerDelegate, UNUserNotificationCenterDelegate {
+    
+    //タスク通知フラグ
+    var notificationFlg = false
+    var notificationGranted = true
 
     //datepicker
     @IBOutlet weak var dailyTaskNotificationDatePicker: UIDatePicker!
-    
 
     override func viewDidLoad() {
         //dailyTaskNotificationDatePicker無効化
@@ -22,17 +26,20 @@ class SettingViewController: UIViewController, MFMailComposeViewControllerDelega
         super.viewDidLoad()
 
     }
+    
     //タスク作成お忘れ防止通知セグメント
     @IBAction func dailyTaskNotificationSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
         case 0:
+            notificationFlg = false
             //タスク通知のdatepickerを無効化
             dailyTaskNotificationDatePicker.isEnabled = false
-            //datepickerの入力値を空にする
 
             //タスク通知のdatepickerを有効化
-        case 1: dailyTaskNotificationDatePicker.isEnabled = true
+        case 1:
+            notificationFlg = true
 
+            dailyTaskNotificationDatePicker.isEnabled = true
         default:
             dailyTaskNotificationDatePicker.isEnabled = false
             break
@@ -42,6 +49,19 @@ class SettingViewController: UIViewController, MFMailComposeViewControllerDelega
     //セッティング画面終了ボタン
     @IBAction func doneSetting(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        //通知セグメントが「通知する」の場合(notificationFlgがtrueの場合)
+        if notificationFlg == true {
+            //通知表示の許諾〜トリガー設定〜通知の表示内容の設定〜登録を行うメソッドを呼び出す
+            setDairyTaskNotification()
+        }
+
+        else
+        //通知セグメントが「通知しない」の場合
+        {
+            //タスクお知らせ通知が登録されていれば削除する
+        }
+
+
     }
 
 
@@ -77,6 +97,52 @@ class SettingViewController: UIViewController, MFMailComposeViewControllerDelega
         }
     }
 
+    //通知表示の許諾〜トリガー設定〜通知の表示内容の設定〜登録を行うメソッド
+
+    func setDairyTaskNotification() {
+        
+        //プッシュ通知認証許可フラグ
+        var isFirst = true
+        //デリゲートメソッドを設定
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            self.notificationGranted = granted
+
+            if let error = error {
+                print("エラーです")
+            }
+        }
+        isFirst = false
+
+        //通知日時の設定
+        var trigger: UNNotificationTrigger
+        //noticficationtimeにdatepickerで取得した値をset
+        var forSetnotificationTime = DateComponents()
+        
+        let notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: dailyTaskNotificationDatePicker.date)
+        
+        var intNotificationHour : Int!
+        var intNotificationMinute : Int!
+        
+        intNotificationHour = notificationTime.hour
+        intNotificationMinute = notificationTime.minute
+
+        forSetnotificationTime.hour = intNotificationHour
+        forSetnotificationTime.minute = intNotificationMinute
+
+        //triggerに現在時刻から〇〇秒後のタスク実行時間をset
+        trigger = UNCalendarNotificationTrigger(dateMatching: forSetnotificationTime, repeats: false)
+        //タスク通知内容の設定
+        let content = UNMutableNotificationContent()
+        content.title = "明日のタスクを確認しましょう"
+        content.body = "タスクを登録してください"
+        content.sound = .default
+        print(notificationTime)
+        //通知スタイルを指定
+        let request = UNNotificationRequest(identifier: "id", content: content, trigger: trigger)
+        //通知をセット
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
 
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result {
