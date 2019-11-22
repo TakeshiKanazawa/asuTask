@@ -465,6 +465,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="3Wb-Da-rjz"/>
                     </view>
+                    <connections>
+                        <outlet property="taskNameButton" destination="pN6-xN-HNT" id="Jxd-kz-khD"/>
+                        <outlet property="taskPlannedTimeButton" destination="6VY-eF-bVT" id="u0g-FI-AHz"/>
+                        <outlet property="taskPriorityButton" destination="pzW-xD-92t" id="0wQ-5l-qXH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3EL-UZ-yKn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -135,7 +135,7 @@ class SettingViewController: UIViewController, MFMailComposeViewControllerDelega
         //タスク通知内容の設定
         let content = UNMutableNotificationContent()
         content.title = "明日のタスクを確認しましょう"
-        content.body = "タスクを登録してください"
+        content.body = "明日やることはありませんか？"
         content.sound = .default
         print(notificationTime)
         //通知スタイルを指定

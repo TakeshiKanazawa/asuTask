@@ -22,13 +22,15 @@ class NextViewController: UIViewController {
 
     var reloadData: ReloadProtocol?
     var dateProtol: DateProtocol?
+    
+    var alertController: UIAlertController!
 
     //タスク名のテキストフィールド
     var taskNameString = String()
     @IBOutlet weak var taskNameTextField: UITextField!
 
     //タスク通知日時のDatePicker
-
+    
 
     @IBOutlet weak var taskDatePicker: UIDatePicker!
 
@@ -36,15 +38,13 @@ class NextViewController: UIViewController {
         super.viewDidLoad()
 
         taskNameTextField.text = taskNameString
-        //Datepicker無効果
+        //Datepicker無効化
         taskDatePicker.isEnabled = false
 
         //デートピッカーの値を取得
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "HH:mm"
-        //動作確認用コード
-        print("\(formatter.string(from: taskDatePicker.date))")
+        //最小日時を現在時刻に設定
+        taskDatePicker.minimumDate = NSDate() as Date
+
     }
 
 
@@ -78,10 +78,41 @@ class NextViewController: UIViewController {
     }
     //完了ボタン
     @IBAction func done(_ sender: Any) {
+        //タスク登録時刻が未来の日付なら処理を継続
+        if checkTime() {
         dateProtol!.setDateSystem(date: taskDatePicker!.date)
-
         reloadData?.reloadSystemData(checkCount: 1)
         dismiss(animated: true, completion: nil)
+    }
+        
+    }
+    //時刻チェックを行うメソッド
+    func checkTime() -> Bool {
+        let currentDate = NSDate() as Date
+                //過去の日付じゃなければ処理を継続
+        let taskDatePickerSettedDate = taskDatePicker.date
+            //時刻を比較。過去の日付なら処理を終了
+        if currentDate >= taskDatePickerSettedDate {
+                alert(title: "登録できません",
+                      message: "未来の日付を指定してください。")
+            print("登録日時エラーの為処理終了")
+                  return false
+        } else {
+            print("日時チェックOK.処理継続")
+              return true
+        }
+      
+    }
+    
+    //アラート表示用メソッド
+    func alert(title:String, message:String) {
+        alertController = UIAlertController(title: title,
+                                   message: message,
+                                   preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "了解！",
+                                       style: .default,
+                                       handler: nil))
+        present(alertController, animated: true)
     }
     
     }
