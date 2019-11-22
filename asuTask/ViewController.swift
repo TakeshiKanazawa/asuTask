@@ -16,6 +16,7 @@ extension Date {
     }
 }
 
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, UNUserNotificationCenterDelegate {
 
     var notificationGranted = true
@@ -34,11 +35,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
 
-    //タスク名の配列
+    //タスク名を入れる配列
     var textArray = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //tableview　⇨ viewcontroller へ処理を任せる
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
@@ -47,9 +49,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         appDelegate.viewController = self
 
     }
+    
+
+    //画面タッチでキーボード閉じる
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            textField.resignFirstResponder()
+        }
 
     //フォアグラウンドでも通知を表示する設定
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+
         completionHandler([.alert, .badge, .sound])
     }
 
@@ -79,6 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
      //セクションのセルの数
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            //セルの数を配列の数と同じにする
             return textArray.count
         }
 
@@ -86,16 +96,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         func numberOfSections(in tableView: UITableView) -> Int {
             return 1
         }
-        //セルの中身
+        //セルを構築する際に呼ばれるメソッド
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
             cell.textLabel?.text = textArray[indexPath.row]
+            
+            var num = 0
+            cell.tag = num
+            print(cell.tag)
+            
+            num += 1
+            
+          
+            
             return cell
+            
         }
-    //セルが選択された時
+    
+  
+    
+    //セルが選択(タップ)された時
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             textFieldTouchReturnKey = false
             indexNumber = indexPath.row
+            
+//         let nextVC = storyboard?.instantiateViewController(identifier: "next") as! NextViewController
+//            nextVC.count2 = count
+//            navigationController?.pushViewController(nextVC, animated: true)
+            
         }
 
         //セルの高さ
@@ -108,11 +137,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
                 self.textArray.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                var a = indexPath.row
                 
+                //textarrayの配列から-1する
+                //self.textArray.remove(at: index.row)
+                
+                tableView.reloadData()
+
                //登録済みの通知も削除する
-                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(self.uuid)"])
-                print(self.uuid)
                 
+               let center = UNUserNotificationCenter.current()
+//                //center.removeAllPendingNotificationRequests()
+                center.removePendingNotificationRequests(withIdentifiers: ["\(self.tableView.tag)"])
+                print(self.tableView.tag)
+ 
             }
             deleteButton.backgroundColor = UIColor.red
 
@@ -140,6 +178,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //通知日時の設定
         var trigger: UNNotificationTrigger
         //noticficationtimeにdatepickerで取得した値をset
+        //取得時刻と現在時刻を比較し、過去の日時であった場合は登録せずアラートを出す
+        
         let notificationTime = Calendar.current.dateComponents(in: TimeZone.current, from: date)
         //現在時刻の取得
         let now = Date()
@@ -159,6 +199,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //通知スタイルを指定
         let request = UNNotificationRequest(identifier: "\(uuid)", content: content, trigger: trigger)
+        //print("\(uuid)")
     
         //通知をセット
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
@@ -200,5 +241,4 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     }
 }
-
 
