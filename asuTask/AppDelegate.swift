@@ -8,12 +8,13 @@
 
 import UIKit
 import UserNotifications
+var textArray = [String]()
 
 @UIApplicationMain
 class AppDelegate: UIResponder,UIApplicationDelegate,DateProtocol {
     
     var viewController: ViewController!
-    
+    var textArray = [String]()
 
     var window: UIWindow?
     var dateTime = Date()

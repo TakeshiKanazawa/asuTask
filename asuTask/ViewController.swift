@@ -17,7 +17,9 @@ extension Date {
 }
 
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, UNUserNotificationCenterDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, setidProtocol,UNUserNotificationCenterDelegate {
+
+    
 
     var notificationGranted = true
     var dateTime = Date()
@@ -29,14 +31,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //タスク件数表示用ラベル
     @IBOutlet weak var todaysTaskMessageLabel: UILabel!
 
-    var indexNumber = Int()
-    var uuid = 0
-
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
 
     //タスク名を入れる配列
     var textArray = [String]()
+    //タスクのIdentifierを入れるための配列
+    var idArray = [String]()
+    //選択されたセルの番号を入れるための変数
+    var indexNumber = Int()
+    var uuid = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,11 +84,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
+    //nextVCで完了ボタンが押されたら呼ばれるメソッド
     func reloadSystemData(checkCount: Int) {
         if checkCount == 1 {
+            //textArrayにタスク追加
+            textArray.append(textField.text!)
+            //tableView再読み込み
             tableView.reloadData()
         }
     }
+    
+    func setId(id: String) {
+     
+        idArray.append(id)
+        print(idArray)
+    }
+    
+    
     
      //セクションのセルの数
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,29 +118,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
             cell.textLabel?.text = textArray[indexPath.row]
             
-            var num = 0
-            cell.tag = num
-            print(cell.tag)
-            
-            num += 1
-            
-          
-            
             return cell
             
         }
-    
-  
     
     //セルが選択(タップ)された時
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             textFieldTouchReturnKey = false
             indexNumber = indexPath.row
-            
-//         let nextVC = storyboard?.instantiateViewController(identifier: "next") as! NextViewController
-//            nextVC.count2 = count
-//            navigationController?.pushViewController(nextVC, animated: true)
-            
         }
 
         //セルの高さ
@@ -135,21 +136,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //セルをスワイプで削除
         func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
             let deleteButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "削除") { (action, index) -> Void in
-                self.textArray.remove(at: indexPath.row)
+                
+                  let center = UNUserNotificationCenter.current()
+                center.removePendingNotificationRequests(withIdentifiers: [self.idArray[indexPath.row]])
+                //center.removeAllPendingNotificationRequests()
+                print(self.idArray[self.indexNumber])
+                    self.textArray.remove(at: indexPath.row)
+                   self.idArray.remove(at: indexPath.row)
+                print(self.idArray)
+                
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                var a = indexPath.row
-                
-                //textarrayの配列から-1する
-                //self.textArray.remove(at: index.row)
-                
-                tableView.reloadData()
-
-               //登録済みの通知も削除する
-                
-               let center = UNUserNotificationCenter.current()
-//                //center.removeAllPendingNotificationRequests()
-                center.removePendingNotificationRequests(withIdentifiers: ["\(self.tableView.tag)"])
-                print(self.tableView.tag)
+                //本日のタスク件数の再読み込み
+                self.todaysTaskMessageLabelChange()
  
             }
             deleteButton.backgroundColor = UIColor.red
@@ -197,9 +195,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         content.body = "タスクを実行してください"
         content.sound = .default
         
-        //通知スタイルを指定
-        let request = UNNotificationRequest(identifier: "\(uuid)", content: content, trigger: trigger)
-        //print("\(uuid)")
+        //ユニークIDの設定
+        let identifier = NSUUID().uuidString
+        //登録用リクエストの設定
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        print(identifier)
+        idArray.append(identifier)
+        print(idArray)
     
         //通知をセット
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
@@ -226,17 +228,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //デリゲート元の設定
             nextVC.reloadData = self
             nextVC.dateProtol = self
+            nextVC.setId = self
         }
     }
 
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //タスク名が入力されていない場合キーボード閉じる
+        if (textField.text == ""){
+             textField.resignFirstResponder()
+        }else {
         textFieldTouchReturnKey = true
-        textArray.append(textField.text!)
         textField.resignFirstResponder()
         //タスク作成画面へ遷移させる
         performSegue(withIdentifier: "next", sender: nil)
-
+        }
         return true
 
     }

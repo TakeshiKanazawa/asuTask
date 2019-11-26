@@ -13,15 +13,23 @@ protocol ReloadProtocol {
     func reloadSystemData(checkCount: Int)
 }
 
+protocol setidProtocol {
+    func setId(id:String)
+}
+
 protocol DateProtocol {
     //規則を決める
     func setDateSystem(date: Date)
 }
 
 class NextViewController: UIViewController {
+    
 
     var reloadData: ReloadProtocol?
     var dateProtol: DateProtocol?
+    var setId:setidProtocol?
+    //タスク通知フラグ
+    var taskNotification = false
     
     var alertController: UIAlertController!
 
@@ -31,11 +39,12 @@ class NextViewController: UIViewController {
 
     //タスク通知日時のDatePicker
     
-
     @IBOutlet weak var taskDatePicker: UIDatePicker!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        taskNotification = false
 
         taskNameTextField.text = taskNameString
         //Datepicker無効化
@@ -52,11 +61,13 @@ class NextViewController: UIViewController {
     @IBAction func taskSegment(_ sender: Any) {
         switch (sender as AnyObject).selectedSegmentIndex {
         case 0:
-            //タスク通知のdatepickerを無効化する処理
+            //タスク通知のdatepickerを無効化する処理(タスク通知しない)
             taskDatePicker.isEnabled = false
+            taskNotification = false
 
-            //タスク通知のdatepickerを有効化する処理
+            //タスク通知のdatepickerを有効化する処理(タスク通知する)
         case 1: taskDatePicker.isEnabled = true
+            taskNotification = true
 
         default:
             taskDatePicker.isEnabled = false
@@ -64,10 +75,11 @@ class NextViewController: UIViewController {
         }
     }
 
-    //戻るボタン
+    //キャンセルボタン
     @IBAction func back(_ sender: Any) {
 
         dismiss(animated: true, completion: nil)
+        
     }
     //タスク優先度ボタン
     
@@ -78,14 +90,22 @@ class NextViewController: UIViewController {
     }
     //完了ボタン
     @IBAction func done(_ sender: Any) {
-        //タスク登録時刻が未来の日付なら処理を継続
-        if checkTime() {
+        //タスク通知する場合⇨登録時刻が未来の日付なら処理を継続
+        if taskNotification == true && checkTime() {
         dateProtol!.setDateSystem(date: taskDatePicker!.date)
-        reloadData?.reloadSystemData(checkCount: 1)
-        dismiss(animated: true, completion: nil)
-    }
+            reloadData?.reloadSystemData(checkCount: 1)
+            dismiss(animated: true, completion: nil)
+            //もしタスク通知がfalseなら。Viewコントローラーのtextarrayに仮値をappend
+        }else if taskNotification == false {
+            setId?.setId(id: "test")
+            reloadData?.reloadSystemData(checkCount: 1)
+             dismiss(animated: true, completion: nil)
         
-    }
+        }
+        //dismiss(animated: true, completion: nil)
+        }
+        
+
     //時刻チェックを行うメソッド
     func checkTime() -> Bool {
         let currentDate = NSDate() as Date
@@ -114,6 +134,7 @@ class NextViewController: UIViewController {
                                        handler: nil))
         present(alertController, animated: true)
     }
+    
     
     }
 
