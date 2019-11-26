@@ -97,7 +97,7 @@ class NextViewController: UIViewController {
             dismiss(animated: true, completion: nil)
             //もしタスク通知がfalseなら。Viewコントローラーのtextarrayに仮値をappend
         }else if taskNotification == false {
-            setId?.setId(id: "test")
+            setId?.setId(id: "no ID")
             reloadData?.reloadSystemData(checkCount: 1)
              dismiss(animated: true, completion: nil)
         

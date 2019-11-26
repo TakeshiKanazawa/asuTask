@@ -148,12 +148,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 //本日のタスク件数の再読み込み
                 self.todaysTaskMessageLabelChange()
- 
+                }
+              let doneButton: UITableViewRowAction = UITableViewRowAction(style: .normal, title: "完了") { (action, index) -> Void in
+                  //ここに完了ボタンを押した時の処理を書く！
+                    
             }
-            deleteButton.backgroundColor = UIColor.red
-
-            return [deleteButton]
-        }
+                deleteButton.backgroundColor = UIColor.red
+            doneButton.backgroundColor = UIColor.blue
+            
+ return [deleteButton,doneButton]
+        
+    }
 
     func setDateSystem(date: Date) {
 
