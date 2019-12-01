@@ -27,15 +27,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //タスク入力用テキストフィールド
     @IBOutlet weak var textField: UITextField!
     //テーブルビュー
+
+   
     @IBOutlet weak var tableView: UITableView!
     //タスク件数表示用ラベル
     @IBOutlet weak var todaysTaskMessageLabel: UILabel!
 
+    @IBOutlet weak var checkButton: CheckBox!
     //リターンキーが押されたかどうかを判定する
     var textFieldTouchReturnKey = false
 
     //タスク名を入れる配列
     var textArray = [String]()
+    
     //タスクのIdentifierを入れるための配列
     var idArray = [String]()
     //選択されたセルの番号を入れるための変数
@@ -45,6 +49,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         //tableview　⇨ viewcontroller へ処理を任せる
+        
         tableView.delegate = self
         tableView.dataSource = self
         textField.delegate = self
@@ -112,11 +117,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         func numberOfSections(in tableView: UITableView) -> Int {
             return 1
         }
-        //セルを構築する際に呼ばれるメソッド
+    @IBAction func checkButton(_ sender: Any) {
+    }
+    //セルを構築する際に呼ばれるメソッド
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            cell.textLabel?.text = textArray[indexPath.row]
+            //カスタムセルを使用
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! CustomTableViewCell
+            print(textArray[indexPath.row])
+            cell.setCell(titleText: textArray[indexPath.row])
             
             return cell
             
