@@ -9,6 +9,8 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
+   
+    
     @IBOutlet weak var checkButton: CheckBox!
     
     @IBOutlet weak var taskTextLabel: UILabel!

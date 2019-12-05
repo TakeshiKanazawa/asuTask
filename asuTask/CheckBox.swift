@@ -18,6 +18,7 @@ class CheckBox: UIButton {
         didSet{
             if isChecked == true {
                 self.setImage(checkedImage, for: UIControl.State.normal)
+                
             } else {
                 self.setImage(uncheckedImage, for: UIControl.State.normal)
             }
