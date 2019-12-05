@@ -60,10 +60,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
 
-    //画面タッチでキーボード閉じる
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            textField.resignFirstResponder()
-        }
+    //画面タッチでキーボード閉じる(ios13から機能しない？？)
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//            textField.resignFirstResponder()
+//        }
 
     //フォアグラウンドでも通知を表示する設定
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -100,7 +100,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func setId(id: String) {
-     
         idArray.append(id)
         print(idArray)
     }
@@ -117,8 +116,55 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         func numberOfSections(in tableView: UITableView) -> Int {
             return 1
         }
-    @IBAction func checkButton(_ sender: Any) {
+    //checkBoxのボタン
+    
+    @IBAction func checkButton(_ sender: CheckBox) {
+        let cell = sender.superview?.superview as! CustomTableViewCell
+        let indexPath = self.tableView.indexPath( for: cell )
+        
+        // Cellの削除処理
+//        self.tableView.beginUpdates()
+//
+//        self.tableView.deleteRows(at: [indexPath!], with: UITableView.RowAnimation.fade)
+//
+//
+//       self.tableView.endUpdates()
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [self.idArray[indexPath!.row]])
+                       
+                       print(self.idArray[self.indexNumber])
+        self.textArray.remove(at: indexPath!.row)
+        self.idArray.remove(at: indexPath!.row)
+                       print(self.idArray)
+                       
+        tableView.deleteRows(at: [indexPath!], with: .fade)
+
+        print(cell)
+        print(indexPath)
+        //チェックがついていた時の処理
+    //削除ボタンを押した時に該当のセルを取得できるようにする
+        if sender.isChecked {
+            print(true)
+        }
+        //チェックがついていなかった場合の処理
+        else {
+            
+        }
+
+        }
+    //タスク全完了ボタン
+    @IBAction func taskAllDone(_ sender: Any) {
+        
     }
+    
+
+    
+    //タスク全削除ボタン
+    @IBAction func taskAllDelete(_ sender: Any) {
+       
+    }
+    
+    
     //セルを構築する際に呼ばれるメソッド
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
@@ -126,7 +172,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! CustomTableViewCell
             print(textArray[indexPath.row])
             cell.setCell(titleText: textArray[indexPath.row])
-            
+            //セルボタンのtagにindexpath.rowを設定
+            //cell.checkButton.tag = indexPath.row
             return cell
             
         }
@@ -148,7 +195,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
                   let center = UNUserNotificationCenter.current()
                 center.removePendingNotificationRequests(withIdentifiers: [self.idArray[indexPath.row]])
-                //center.removeAllPendingNotificationRequests()
+                
                 print(self.idArray[self.indexNumber])
                     self.textArray.remove(at: indexPath.row)
                    self.idArray.remove(at: indexPath.row)
@@ -189,6 +236,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func setNotification(date: Date) {
         //通知日時の設定
         var trigger: UNNotificationTrigger
+        //タスク通知名の設定
+        let taskNotificationName = textArray[indexNumber]
         //noticficationtimeにdatepickerで取得した値をset
         //取得時刻と現在時刻を比較し、過去の日時であった場合は登録せずアラートを出す
         
@@ -205,8 +254,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(seconds), repeats: false)
         //タスク通知内容の設定
         let content = UNMutableNotificationContent()
-        content.title = "タスク実行時間です。"
-        content.body = "タスクを実行してください"
+        content.title = "\(taskNotificationName)"
+        content.body = "タスクのお知らせ"
         content.sound = .default
         
         //ユニークIDの設定
