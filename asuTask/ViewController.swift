@@ -19,8 +19,6 @@ extension Date {
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, setidProtocol,UNUserNotificationCenterDelegate {
 
-    
-
     var notificationGranted = true
     var dateTime = Date()
 
@@ -29,6 +27,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //テーブルビュー
 
    
+    @IBOutlet weak var taskAllDone: UIButton!
+    
+    @IBOutlet weak var taskAllDelete: UIButton!
     @IBOutlet weak var tableView: UITableView!
     //タスク件数表示用ラベル
     @IBOutlet weak var todaysTaskMessageLabel: UILabel!
@@ -39,12 +40,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //タスク名を入れる配列
     var textArray = [String]()
-    
-    //タスクのIdentifierを入れるための配列
+    //checkされたタスク(セル)の配列を入れておくための配列
+    var checkedTaskArray = [IndexPath]()
+     //タスクのIdentifierを入れるための配列
     var idArray = [String]()
     //選択されたセルの番号を入れるための変数
     var indexNumber = Int()
     var uuid = 0
+    
+    //入力されたタスクを入れる変数
+    var editText = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,11 +61,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.viewController = self
+        
+        //タスク完了ボタンの非表示
+        taskAllDone.isHidden = true
+        //タスク全削除ボタンの非表示
+        taskAllDelete.isHidden = true
 
     }
     
-
-    //画面タッチでキーボード閉じる(ios13から機能しない？？)
+//画面タッチでキーボード閉じる(ios13から機能しない？？)
 //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //            textField.resignFirstResponder()
 //        }
@@ -104,8 +113,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print(idArray)
     }
     
-    
-    
      //セクションのセルの数
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             //セルの数を配列の数と同じにする
@@ -121,45 +128,37 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func checkButton(_ sender: CheckBox) {
         let cell = sender.superview?.superview as! CustomTableViewCell
         let indexPath = self.tableView.indexPath( for: cell )
-        
-        // Cellの削除処理
-//        self.tableView.beginUpdates()
-//
-//        self.tableView.deleteRows(at: [indexPath!], with: UITableView.RowAnimation.fade)
-//
-//
-//       self.tableView.endUpdates()
-        let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: [self.idArray[indexPath!.row]])
-                       
-                       print(self.idArray[self.indexNumber])
-        self.textArray.remove(at: indexPath!.row)
-        self.idArray.remove(at: indexPath!.row)
-                       print(self.idArray)
-                       
-        tableView.deleteRows(at: [indexPath!], with: .fade)
-
-        print(cell)
-        print(indexPath)
         //チェックがついていた時の処理
-    //削除ボタンを押した時に該当のセルを取得できるようにする
-        if sender.isChecked {
+        if sender.isChecked == false{
+            //タスク完了ボタンの非表示
+            taskAllDone.isHidden = false
+            //タスク全削除ボタンの非表示
+            taskAllDelete.isHidden = false
+        //checkしたタスクのセルを配列に追加
+        checkedTaskArray.append(indexPath!)
+            print(checkedTaskArray)
             print(true)
-        }
-        //チェックがついていなかった場合の処理
-        else {
-            
+        } else {
+            //タスク完了ボタンの非表示
+             taskAllDone.isHidden = true
+             //タスク全削除ボタンの非表示
+             taskAllDelete.isHidden = true
+            checkedTaskArray.remove(at: indexPath!.row)
+            print(checkedTaskArray)
         }
 
+
+
         }
-    //タスク全完了ボタン
+    //タスク全完了ボタンを押下した時
     @IBAction func taskAllDone(_ sender: Any) {
+
         
     }
     
 
     
-    //タスク全削除ボタン
+    //タスク全削除ボタンを押下した時
     @IBAction func taskAllDelete(_ sender: Any) {
        
     }
@@ -172,8 +171,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! CustomTableViewCell
             print(textArray[indexPath.row])
             cell.setCell(titleText: textArray[indexPath.row])
-            //セルボタンのtagにindexpath.rowを設定
-            //cell.checkButton.tag = indexPath.row
+
             return cell
             
         }
@@ -287,7 +285,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //タップした時にその配列の番号の中身を取り出して値を渡す
             let nextVC = segue.destination as! NextViewController
             //遷移先のNextVCのタスク名に、入力したタスク名を表示させる
-            nextVC.taskNameString = textField.text!
+            nextVC.taskNameString = editText
             //デリゲート元の設定
             nextVC.reloadData = self
             nextVC.dateProtol = self
@@ -297,8 +295,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        editText = (textField.text?.trimmingCharacters(in: .whitespaces))!
         //タスク名が入力されていない場合キーボード閉じる
-        if (textField.text == ""){
+        if (editText.isEmpty == true){
              textField.resignFirstResponder()
         }else {
         textFieldTouchReturnKey = true

@@ -126,6 +126,8 @@
                     <tabBarItem key="tabBarItem" title="今日タスク" image="sun" id="2z8-OJ-AD1"/>
                     <connections>
                         <outlet property="tableView" destination="r9h-aj-ik4" id="Nft-Io-rIX"/>
+                        <outlet property="taskAllDelete" destination="iXV-1R-4Fg" id="2bD-s0-0SV"/>
+                        <outlet property="taskAllDone" destination="fXv-Lr-4eg" id="Gni-ox-x1S"/>
                         <outlet property="textField" destination="zQy-Fe-LN0" id="mXd-NG-gdR"/>
                         <outlet property="todaysTaskMessageLabel" destination="3rb-dh-E74" id="D5v-qF-H4O"/>
                         <segue destination="uHD-aB-j8v" kind="presentation" identifier="next" modalPresentationStyle="fullScreen" id="ugC-s5-Ujk"/>
