@@ -9,7 +9,6 @@
 import UIKit
 
 protocol ReloadProtocol {
-    //規則をきめる
     func reloadSystemData(checkCount: Int)
 }
 
@@ -18,8 +17,15 @@ protocol setidProtocol {
 }
 
 protocol DateProtocol {
-    //規則を決める
     func setDateSystem(date: Date)
+}
+
+protocol setTimeProtocol {
+    func setTaskTime(time: String)
+}
+
+protocol setPriorityProtocol {
+    func setTaskPriority(priority: String)
 }
 
 class NextViewController: UIViewController {
@@ -28,11 +34,15 @@ class NextViewController: UIViewController {
     var reloadData: ReloadProtocol?
     var dateProtol: DateProtocol?
     var setId:setidProtocol?
+    var setTime:setTimeProtocol?
+    var setPriority:setPriorityProtocol?
+    
     //タスク通知フラグ
     var taskNotification = false
-    
+    //アラートコントローラー
     var alertController: UIAlertController!
-
+    //タスク優先度
+    var taskPriority = "設定なし"
     //タスク名のテキストフィールド
     var taskNameString = String()
     @IBOutlet weak var taskNameTextField: UITextField!
@@ -49,8 +59,6 @@ class NextViewController: UIViewController {
         taskNameTextField.text = taskNameString
         //Datepicker無効化
         taskDatePicker.isEnabled = false
-
-        //デートピッカーの値を取得
         //最小日時を現在時刻に設定
         taskDatePicker.minimumDate = NSDate() as Date
 
@@ -84,6 +92,25 @@ class NextViewController: UIViewController {
     //タスク優先度ボタン
     
     @IBAction func taskPriority(_ sender: Any) {
+        switch (sender as AnyObject).selectedSegmentIndex {
+            //タスク優先度設定：無し
+        case 0:
+            taskPriority = "設定なし"
+            print(taskPriority)
+           //タスク優先度設定：できたらやる
+        case 1:
+            taskPriority = "できたらやる"
+             print(taskPriority)
+        //タスク優先度設定：絶対やる
+        case 2:
+            taskPriority = "絶対やる"
+             print(taskPriority)
+        default:
+            taskPriority = "設定なし"
+             print(taskPriority)
+            break
+        
+        }
     }
     //タスクスヌーズボタン
     @IBAction func taskSnooze(_ sender: Any) {
@@ -94,15 +121,23 @@ class NextViewController: UIViewController {
         if taskNotification == true && checkTime() {
         dateProtol!.setDateSystem(date: taskDatePicker!.date)
             reloadData?.reloadSystemData(checkCount: 1)
+        //変数taskTimeにDatePickerの時刻を代入
+            let taskTime = format(date: taskDatePicker!.date)
+            print(taskTime)
+            setTime?.setTaskTime(time: taskTime)
+            setPriority?.setTaskPriority(priority: taskPriority)
             dismiss(animated: true, completion: nil)
             //もしタスク通知がfalseなら。Viewコントローラーのtextarrayに仮値をappend
         }else if taskNotification == false {
             setId?.setId(id: "no ID")
+             let taskTime = "設定なし"
+            setTime?.setTaskTime(time: taskTime)
+            setPriority?.setTaskPriority(priority: taskPriority)
             reloadData?.reloadSystemData(checkCount: 1)
              dismiss(animated: true, completion: nil)
         
         }
-        //dismiss(animated: true, completion: nil)
+     
         }
         
 
@@ -135,6 +170,16 @@ class NextViewController: UIViewController {
         present(alertController, animated: true)
     }
     
+    //文字列時刻取得用メソッド
+    func format(date:Date)->String{
+        
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "yyyy年MM月dd日HH時mm分"
+        let strDate = dateformatter.string(from: date)
+        
+        return strDate
+        
+    }
     
     }
 

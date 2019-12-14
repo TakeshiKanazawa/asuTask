@@ -17,7 +17,10 @@ extension Date {
 }
 
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, setidProtocol,UNUserNotificationCenterDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ReloadProtocol, DateProtocol, setidProtocol,UNUserNotificationCenterDelegate,setTimeProtocol,setPriorityProtocol {
+  
+    
+ 
 
     var notificationGranted = true
     var dateTime = Date()
@@ -29,6 +32,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
    
     @IBOutlet weak var taskAllDone: UIButton!
     
+
     @IBOutlet weak var taskAllDelete: UIButton!
     @IBOutlet weak var tableView: UITableView!
     //タスク件数表示用ラベル
@@ -40,14 +44,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //タスク名を入れる配列
     var textArray = [String]()
+    //タスク登録時刻を入れる配列
+    var taskTimeArray = [String]()
+    //タスク優先度を入れる配列
+    var taskPriorityArray = [String]()
     //checkされたタスク(セル)の配列を入れておくための配列
     var checkedTaskArray = [IndexPath]()
      //タスクのIdentifierを入れるための配列
     var idArray = [String]()
     //選択されたセルの番号を入れるための変数
     var indexNumber = Int()
-    var uuid = 0
-    
     //入力されたタスクを入れる変数
     var editText = String()
     
@@ -103,15 +109,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if checkCount == 1 {
             //textArrayにタスク追加
             textArray.append(textField.text!)
+
             //tableView再読み込み
             tableView.reloadData()
         }
     }
-    
+    //NextVCよりデリゲートされたメソッド群
     func setId(id: String) {
         idArray.append(id)
         print(idArray)
     }
+    
+    func setTaskTime(time: String) {
+        taskTimeArray.append(time)
+        print(taskTimeArray)
+    }
+    func setTaskPriority(priority: String) {
+        taskPriorityArray.append(priority)
+      }
     
      //セクションのセルの数
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -152,15 +167,69 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     //タスク全完了ボタンを押下した時
     @IBAction func taskAllDone(_ sender: Any) {
+        let alert: UIAlertController = UIAlertController(title: "タスクの全完了", message: "チェック済みのタスクを全て完了にしても宜しいですか？", preferredStyle:  UIAlertController.Style.actionSheet)
+        // OKボタン
+        let defaultAction_1: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler:{
+            (action: UIAlertAction!) -> Void in
+        //ボタン押下時の処理
+            print("OK")
+        })
 
+
+        // アラートの表示拒否ボタン
+        let cancelAction: UIAlertAction = UIAlertAction(title: "今後このメッセージを表示しない", style: UIAlertAction.Style.cancel, handler:{
+            (action: UIAlertAction!) -> Void in
+        //ボタン押下時の処理
+            print("removeAction")
+        })
+
+        // キャンセルボタン
+        let destructiveAction_1: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.destructive, handler:{
+            (action: UIAlertAction!) -> Void in
+            print("caccelAction_1")
+        })
+        alert.addAction(cancelAction)
+        alert.addAction(defaultAction_1)
+        alert.addAction(destructiveAction_1)
+
+           // ④ Alertを表示
+        present(alert, animated: true, completion: nil)
         
     }
+
+        
     
 
     
     //タスク全削除ボタンを押下した時
     @IBAction func taskAllDelete(_ sender: Any) {
-       
+       let alert: UIAlertController = UIAlertController(title: "タスクの全削除", message: "チェック済みのタスクを全て削除しても宜しいですか？", preferredStyle:  UIAlertController.Style.actionSheet)
+       // OKボタン
+       let defaultAction_1: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler:{
+           (action: UIAlertAction!) -> Void in
+       //ボタン押下時の処理
+           print("OK")
+       })
+
+
+       // アラートの表示拒否ボタン
+       let cancelAction: UIAlertAction = UIAlertAction(title: "今後このメッセージを表示しない", style: UIAlertAction.Style.cancel, handler:{
+           (action: UIAlertAction!) -> Void in
+       //ボタン押下時の処理
+           print("removeAction")
+       })
+
+       // キャンセルボタン
+       let destructiveAction_1: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.destructive, handler:{
+           (action: UIAlertAction!) -> Void in
+           print("caccelAction_1")
+       })
+       alert.addAction(cancelAction)
+       alert.addAction(defaultAction_1)
+       alert.addAction(destructiveAction_1)
+
+          // ④ Alertを表示
+       present(alert, animated: true, completion: nil)
     }
     
     
@@ -179,7 +248,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //セルが選択(タップ)された時
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             textFieldTouchReturnKey = false
-            indexNumber = indexPath.row
+            //セルのハイライト解除
+            tableView.deselectRow(at: indexPath, animated: false)
+            //変数indexNumberにセル番号を代入
+           indexNumber = indexPath.row
+            print(indexNumber)
+            //タスク詳細画面へ遷移
+            performSegue(withIdentifier: "detail", sender: nil)
+            
         }
 
         //セルの高さ
@@ -266,13 +342,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
         //通知をセット
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        //identifier(識別子)をカウントUP
-        uuid += 1
+
     }
    
     //値を次の画面へ渡す処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //セルがタップされた状態(タスク詳細画面の表示)
+            
+                if (segue.identifier == "detail") {
+                    let detailVC: DetailViewController = (segue.destination as? DetailViewController)!
+        
+        //ここでタップされたセルのindexNumberを取得しなければいけない
+                    detailVC.taskNameString = textArray[indexNumber]
+                    detailVC.taskTimeString = taskTimeArray[indexNumber]
+                    detailVC.taskPriorityString = taskPriorityArray[indexNumber]
+                    
+                    print(taskTimeArray[indexNumber])
+                }
+            
 
         if (segue.identifier == "next") &&
             textFieldTouchReturnKey == false {
@@ -280,6 +367,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let nextVC = segue.destination as! NextViewController
             //変数名.が持つ変数 =  渡したいものが入った変数
             nextVC.taskNameString = textArray[indexNumber]
+            
 
         } else if (segue.identifier == "next") && textFieldTouchReturnKey == true {
             //タップした時にその配列の番号の中身を取り出して値を渡す
@@ -290,8 +378,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             nextVC.reloadData = self
             nextVC.dateProtol = self
             nextVC.setId = self
+            nextVC.setTime = self
+            nextVC.setPriority = self
         }
     }
+    
+    
 
     //returnキーが押された時に発動するメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
